@@ -1,0 +1,44 @@
+spring:
+  cloud:
+    gateway:
+      httpserver:
+        wiretap: true
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/image/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/auth/**
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:4000"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders:
+              - Content-Type
+              - Authorization
+            allowCredentials: true
+    web:
+      resources:
+        add-mappings: false
+  application:
+    name: gateway-service
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+server:
+  port: 8100

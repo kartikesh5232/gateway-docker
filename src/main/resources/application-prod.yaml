@@ -1,0 +1,27 @@
+spring:
+  cloud:
+    gateway:
+      httpserver:
+        wiretap: true
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/image/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/auth/**
+    web:
+      resources:
+        add-mappings: false
+  application:
+    name: gateway-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-service:7000/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
